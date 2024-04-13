@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
     gameArena.innerHTML = "";
 
     const foodElement = drawDiv(food.x, food.y, "food");
+    snake.forEach((snakeCell) => {
+      const element = drawDiv(snakeCell.x, snakeCell.y, "snake");
+      gameArena.appendChild(element);
+    });
     gameArena.appendChild(foodElement);
   }
 
@@ -37,6 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
       drawScoreBoard();
       drawFoodAndSnake();
+      score++;
     }, 1000);
   }
 
