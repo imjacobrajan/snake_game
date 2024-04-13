@@ -40,12 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function moveFood() {
     let newX, newY;
     do {
-      newX = Math.floor(
-        Math.random() * ((arenaSize - cellSize) / cellSize) * cellSize
-      );
-      newy = Math.floor(
-        Math.random() * ((arenaSize - cellSize) / cellSize) * cellSize
-      );
+      newX =
+        Math.floor(Math.random() * ((arenaSize - cellSize) / cellSize)) *
+        cellSize;
+      newY =
+        Math.floor(Math.random() * ((arenaSize - cellSize) / cellSize)) *
+        cellSize;
     } while (
       snake.some((snakeCell) => snakeCell.x === newX && snakeCell.y === newY)
     );
@@ -63,17 +63,78 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function isGameOver() {
+    for (i = 1; i < snake.length; i++) {
+      if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) return true;
+    }
+
+    //wall collision
+    const isHitingLeftWall = snake[0].x < 0;
+    const isHitingTopWall = snake[0].y < 0;
+    const isHitingRightWall = snake[0].x >= arenaSize - cellSize;
+    const isHitingDownWall = snake[0].y >= arenaSize - cellSize;
+
+    return (
+      isHitingLeftWall ||
+      isHitingTopWall ||
+      isHitingRightWall ||
+      isHitingDownWall
+    );
+  }
+
   function gameLoop() {
     setInterval(() => {
+      if (!gameStarted) return;
+
+      if (isGameOver()) {
+        gameStarted = false;
+        alert(`Game over, Score = ${score}`);
+        document.location.reload();
+        return;
+      }
       updateSnake();
       drawScoreBoard();
       drawFoodAndSnake();
-    }, 1000);
+    }, 200);
+  }
+
+  function changeDirection(e) {
+    const LEFT_KEY = 37;
+    const RIGHT_KEY = 39;
+    const UP_KEY = 38;
+    const DOWN_KEY = 40;
+
+    const keyPressed = e.keyCode;
+
+    const isGoingUp = dy === -cellSize;
+    const isGoingDown = dy === cellSize;
+    const isGoingLeft = dx === -cellSize;
+    const isGoingRight = dx === cellSize;
+
+    if (keyPressed === LEFT_KEY && !isGoingRight) {
+      dy = 0;
+      dx = -cellSize;
+    }
+    if (keyPressed === RIGHT_KEY && !isGoingLeft) {
+      dy = 0;
+      dx = cellSize;
+    }
+    if (keyPressed === UP_KEY && !isGoingDown) {
+      dy = -cellSize;
+      dx = 0;
+    }
+    if (keyPressed === DOWN_KEY && !isGoingUp) {
+      dy = cellSize;
+      dx = 0;
+    }
   }
 
   function runGame() {
-    gameStarted = true;
-    gameLoop();
+    if (!gameStarted) {
+      gameStarted = true;
+      gameLoop();
+      document.addEventListener("keydown", changeDirection);
+    }
   }
 
   function initiateGame() {
