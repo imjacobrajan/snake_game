@@ -9,11 +9,29 @@ body {
 }
 
 #game-arena {
-  width: 800px;
-  height: 800px;
+  width: 600px;
+  height: 600px;
   background-color: #333;
   position: relative;
   border: 5px solid #666;
   margin-bottom: 20px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#score-board {
+  font-size: x-large;
+  color: chocolate;
+  margin: 10px 0;
+}
+
+.start-button {
+  background-color: tomato;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin: 4px 0;
 }
